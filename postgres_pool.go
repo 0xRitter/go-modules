@@ -35,6 +35,25 @@ type PostgresConnConfig struct {
 	EnableSsl      bool   `json:"ssl"`
 }
 
+func InitPostgresPoolViaUrl(url string) (pool *PostgresPool, err error) {
+	url = fmt.Sprintf("%s?sslmode=disable", url)
+	db, err := sql.Open("postgres", url)
+	if err != nil {
+		return nil, err
+	}
+	db.Ping()
+
+	dbx := sqlx.NewDb(db, "postgres")
+	dbx.MapperFunc(LowerCaseWithUnderscores)
+
+	pool = &PostgresPool{db, dbx}
+	if GPostgresPool == nil {
+		GPostgresPool = pool
+	}
+
+	return pool, nil
+}
+
 func InitPostgresPool(Host string, User string, Pass string, Port int64, Database string) (pool *PostgresPool, err error) {
 	postgres_cfg := PostgresConnConfig{
 		User:      User,
