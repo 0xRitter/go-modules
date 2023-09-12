@@ -36,7 +36,6 @@ type PostgresConnConfig struct {
 }
 
 func InitPostgresPoolViaUrl(url string) (pool *PostgresPool, err error) {
-	url = fmt.Sprintf("%s", url)
 	db, err := sql.Open("postgres", url)
 	if err != nil {
 		return nil, err

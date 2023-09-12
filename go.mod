@@ -1,4 +1,4 @@
-module github.com/vibexyz/go-modules
+module github.com/0xRitter/go-modules
 
 go 1.19
 
